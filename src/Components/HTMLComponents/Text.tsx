@@ -30,7 +30,7 @@ export function Text(data: any) {
   return (
     <>
       {" "}
-      {data?.role == "bot" ? (
+      {data?.role === "bot" ? (
         <span>
           {pointsArr?.map((point: any, index) => (
             <p className="points" key={index}>{point?.trim()}</p>

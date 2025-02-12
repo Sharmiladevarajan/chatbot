@@ -116,7 +116,7 @@ export function Chatbot() {
       ...lastMessage,
       order: lastMessage.order + 1,
       role: role,
-      show:role=="bot"?true:true,
+      show:role==="bot"?true:true,
       meta: {
         ...lastMessage.metaData,
         timeStamp: new Date(),
@@ -134,7 +134,7 @@ export function Chatbot() {
     };
     if (
   
-      type == "btn"
+      type ==="btn"
     ) {
       if (Array.isArray(lastMessage?.data?.content)) {
         lastMessage?.data?.content?.forEach((choice: any) => {
@@ -279,7 +279,7 @@ export function Chatbot() {
       console.log(response.data.data,response.status,"099876543");
       
       if (
-        response.data.data.status_code==200
+        response.data.data.status_code===200
       ) {
         setChatMessages(response.data.data);
         setLoader(false);
@@ -296,13 +296,10 @@ export function Chatbot() {
   };
  
   const handleResponseBinding = (value: any, type: string) => {
-    if (value != "") {
-      if (type == "multchc") {
-        let val = value.join(",");
-        executeSendActions(val, type, "user");
-      } else {
+    if (value !== "") {
+      
         executeSendActions(value, type, "user");
-      }
+      
     }
   };
 
@@ -414,22 +411,22 @@ console.log(chatMessages);
                 cursor: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableText == 1
+                    ]?.inputConfig?.disableText === 1
                     ? "not-allowed"
                     : chatMessages?.chatConversation[
                         chatMessages?.chatConversation?.length - 1
-                      ]?.inputConfig?.disableText == 0
+                      ]?.inputConfig?.disableText === 0
                     ? "pointer"
                     : "not-allowed"
                   : "not-allowed",
                 opacity: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableText == 1
+                    ]?.inputConfig?.disableText === 1
                     ? 0.5
                     : chatMessages?.chatConversation[
                         chatMessages?.chatConversation?.length - 1
-                      ]?.inputConfig?.disableText == 0
+                      ]?.inputConfig?.disableText === 0
                     ? 1
                     : 0.5
                   : 0.5,
@@ -461,11 +458,11 @@ console.log(chatMessages);
                 Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.hiddenAttachment == 1
+                    ]?.inputConfig?.hiddenAttachment === 1
                     ? true
                     : chatMessages?.chatConversation[
                         chatMessages?.chatConversation?.length - 1
-                      ]?.inputConfig?.hiddenAttachment == 0
+                      ]?.inputConfig?.hiddenAttachment === 0
                     ? false
                     
                     : true
@@ -475,14 +472,14 @@ console.log(chatMessages);
                 cursor: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableAttachment == 1
+                    ]?.inputConfig?.disableAttachment === 1
                     ? "not-allowed"
                     : "pointer"
                   : "not-allowed",
                 opacity: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableAttachment == 1
+                    ]?.inputConfig?.disableAttachment === 1
                     ? 0.5
                     : 1
                   : 1,
@@ -497,11 +494,11 @@ console.log(chatMessages);
                 Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.hiddenVoice == 1
+                    ]?.inputConfig?.hiddenVoice === 1
                     ? true
                     : chatMessages?.chatConversation[
                         chatMessages?.chatConversation?.length - 1
-                      ]?.inputConfig?.hiddenVoice == 0
+                      ]?.inputConfig?.hiddenVoice === 0
                     ? false
                    
                     : true
@@ -511,14 +508,14 @@ console.log(chatMessages);
                 cursor: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableVoice == 1
+                    ]?.inputConfig?.disableVoice === 1
                     ? "not-allowed"
                     : "pointer"
                   : "not-allowed",
                 opacity: Array.isArray(chatMessages?.chatConversation)
                   ? chatMessages?.chatConversation[
                       chatMessages?.chatConversation?.length - 1
-                    ]?.inputConfig?.disableVoice == 1
+                    ]?.inputConfig?.disableVoice === 1
                     ? 0.5
                     : 1
                   : 1,
