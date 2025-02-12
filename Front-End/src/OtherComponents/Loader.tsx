@@ -24,7 +24,7 @@ function LoadingIndicator() {
     <div className="ai-bot-response-container">
       <img
         className="ai-bot-avatar"
-        src="images/chatbot-avatar.png"
+        src="images/chatbot-avatar.svg"
         alt="chatbot avatar icon"
       />
       <div className="ai-bot-response">

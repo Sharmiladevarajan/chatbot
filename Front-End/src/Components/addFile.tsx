@@ -1,7 +1,0 @@
-import parse from 'html-react-parser';
-
-const Content = () => {
-  const htmlString= "<h1>Score: 55/100</h1>\n<p>Your resume shows some relevant experience, but it lacks the specific backend development focus that this position requires. You have a solid foundation in software engineering and have worked with TypeScript, but you do not meet the minimum experience requirement of 5 years in backend development, as you only have 2 years listed. Additionally, there is no mention of NodeJS, NestJS, or MongoDB, which are crucial for this role.</p>\n<ul>\n    <li><strong>Strengths:</strong> You have experience with TypeScript and AWS, which are relevant to the job. Your background in AI and full-stack development showcases your technical skills and ability to work on complex projects.</li>\n    <li><strong>Weaknesses:</strong> Lack of direct experience with NodeJS, NestJS, and MongoDB. You also do not demonstrate the required DevOps practices or experience with Kubernetes, which are essential for this role.</li>\n</ul>\n<p>To improve your resume, consider gaining more experience in backend technologies, particularly NodeJS and MongoDB. Highlight any relevant projects or coursework that align with the job description. Additionally, focus on showcasing your experience with DevOps practices and any collaborative work with remote teams to better match the requirements.</p>"
-  return <div>{parse(htmlString)}</div>;
-};
-export default Content

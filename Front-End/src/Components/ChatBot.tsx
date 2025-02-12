@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 // import { format, parseISO } from "date-fns-tz";
 import { v4 as uuidv4 } from "uuid";
-import {  makeAgentRequest,uploadFile } from "../Service/Api";
+import {  makeAgentRequest } from "../Service/Api";
 import {
   userDetails,
   ChatMessage,
@@ -17,7 +17,6 @@ export function Chatbot() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [loader, setLoader] = useState<boolean>(false);
   const [error, setError] = useState<any>("");
-  const [botCss, setBotCss] = useState({ body: false });
   const [inputVal, setInputVal] = useState<any>("");
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -87,24 +86,8 @@ export function Chatbot() {
       },
     },
   });
-  const [botConfig, setBotConfig] = useState<BotConfig>({
-    chatbot_name: "Bot",
-    chatbot_logo: "",
-    enable_file_attachment: true,
-    enable_voice: true,
-    enable_emoji: true,
-  });
 
-  useEffect(() => {
-    // need to get the userDetails
-    // const fetchData = async () => {
-    //   // let val = await generateJwtToken();
-    //   // sessionStorage.setItem("access_token", val);
-    //   generateGreetingMessage();
-    // };
-    // fetchData();
-  
-  }, []);
+
 
   useEffect(() => {
     scrollToBottom();
@@ -404,7 +387,7 @@ console.log(chatMessages);
 
   return (
     <>
-      <div className="ai-container" hidden={botCss.body}>
+      <div className="ai-container" >
         {/* <div className="ai-header ai-header-icon"></div> */}
         <div className="ai-body">
           <div className="ai-content-container" ref={chatContainerRef}>
@@ -498,10 +481,7 @@ console.log(chatMessages);
                         chatMessages?.chatConversation?.length - 1
                       ]?.inputConfig?.hiddenAttachment == 0
                     ? false
-                    : botConfig?.enable_file_attachment == true
-                    ? true
-                    : botConfig?.enable_file_attachment == false
-                    ? true
+                    
                     : true
                   : false
               }
@@ -537,10 +517,7 @@ console.log(chatMessages);
                         chatMessages?.chatConversation?.length - 1
                       ]?.inputConfig?.hiddenVoice == 0
                     ? false
-                    : botConfig?.enable_voice == true
-                    ? true
-                    : botConfig?.enable_voice == false
-                    ? true
+                   
                     : true
                   : false
               }
