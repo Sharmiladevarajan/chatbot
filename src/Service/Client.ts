@@ -3,9 +3,7 @@ import axios from "axios";
 async function client(endpoint: string, body: any, requestType: string, ) {
   
   try {
-    let url = `${endpoint}`;
-
-  
+   
     let config = {
       method: requestType,
       url: endpoint,

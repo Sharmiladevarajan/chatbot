@@ -6,7 +6,7 @@ export function Text(data: any) {
   const [pointsArr, setPointsArr] = useState([]);
   useEffect(() => {
     Content(data?.value);
-  }, []);
+  }, [data]);
   const Content = (content: any) => {
     let points;
     if (/:|\n|\d+\./.test(content)) {
