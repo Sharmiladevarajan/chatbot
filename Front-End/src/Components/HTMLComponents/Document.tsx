@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function Document(data: any) {
+export function Document(data:any,func:any) {
   console.log(data, "2345");
 
   return (
@@ -29,7 +29,7 @@ export function Document(data: any) {
           placeholder="Upload resume"
           type="file"
           onChange={(e) => {
-            data.record.func(e);
+            data.func(e);
           }}
         />
       </div>

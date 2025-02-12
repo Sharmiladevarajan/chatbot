@@ -1,67 +1,49 @@
+
 import { Text } from "./HTMLComponents/Text";
-
 import { Buttons } from "./HTMLComponents/Buttons";
-
 import { Document } from "./HTMLComponents/Document";
-
 import HTMLContent from "./HTMLComponents/html"
 
+export function BindBotResponse({ record }:any) {
+  const { contentType, content} = record.value;
+  const {role,file_func,func,message}  = record;
+console.log(record,"props");
 
-export function BindBotResponse(data: any) {
-  const { contentType, content } = data?.record.value;
-  console.log(data,content,contentType,"2345678");
-  
-  const returnComponents = () => {
+  const renderComponent = () => {
+    const commonProps = { value: content,role };
+    console.log(commonProps);
     
     switch (contentType) {
-      
-      case "txt":
+      case 'txt':
         return (
-          <>
-            <div className="col-md-6 mb-4 mt-3">
-              <Text record={{ value: content ,role:data?.record?.role}} />
-            </div>
-          </>
+          <div className="col-md-6 mb-4 mt-3">
+            <Text {...commonProps} />
+          </div>
         );
-        case "html":
+      case 'html':
         return (
-          <>
-            <div className="col-md-6 mb-4 mt-3">
-              <HTMLContent record={{ value: content ,role:data?.record?.role}} />
-            </div>
-          </>
+          <div className="col-md-6 mb-4 mt-3">
+            <HTMLContent {...commonProps} />
+          </div>
         );
-        
-     case "btn":
+      case 'btn':
         return (
-          <>
-            <div className="col-md-6 mb-4 mt-3">
-              <Buttons
-                record={{
-                  value: content,
-                  func: data.record.func,
-                  msg:data?.record?.message
-                }}
-              />
-            </div>
-          </>
+          <div className="col-md-6 mb-4 mt-3">
+            <Buttons value={content} func={func} msg={message} />
+          </div>
         );
-     case "doc":
+      case 'doc':
         return (
-          <>
-            <div className="col-md-6 mb-4 mt-3">
-              <Document record={{ value: content,func:data.record.file_func }} />
-            </div>
-          </>
+          <div className="col-md-6 mb-4 mt-3">
+            <Document value={content} func={file_func} />
+          </div>
         );
-      
-        
       default:
-        return null; // Default case, render nothing or handle accordingly
+        return null;
     }
   };
 
-  return <>{returnComponents()}</>;
+  return <>{renderComponent()}</>;
 }
 
 export default BindBotResponse;

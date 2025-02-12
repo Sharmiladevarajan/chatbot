@@ -105,15 +105,24 @@ export function Chatbot() {
 
  
 
-  const addUserRequest = (value:string, type:string, role:string) => {
-    const lastMessage = chatMessages.chatConversation.at(-1);
-    const newMessage = {
+  const addUserRequest = (
+    value: string,
+    type: string,
+    role: string
+  ): boolean => {
+    const lastMessage =
+      chatMessages?.chatConversation[chatMessages.chatConversation.length - 1];
+    const duplicatedMessage = {
       ...lastMessage,
       order: lastMessage.order + 1,
-      role,
+      role: role,
       meta: {
         ...lastMessage.metaData,
         timeStamp: new Date(),
+      },
+      inputConfig: {
+        ...lastMessage.inputConfig,
+        
       },
       data: {
         ...lastMessage.data,
@@ -121,23 +130,26 @@ export function Chatbot() {
         contentType: "txt",
       },
     };
+    if (
   
-    if (type === "btn" && Array.isArray(lastMessage?.data?.content)) {
-      lastMessage.data.content.forEach((choice:any) => {
-        choice.selected = choice.options === value;
-      });
+      type == "btn"
+    ) {
+      if (Array.isArray(lastMessage?.data?.content)) {
+        lastMessage?.data?.content?.forEach((choice: any) => {
+          choice.selected = choice.options === value;
+        });
+      }
     }
-  
-    setChatMessages((prevMessages:any) => ({
-      ...prevMessages,
-      chatConversation: [...prevMessages.chatConversation, newMessage],
-    }));
-  
+    chatMessages?.chatConversation.push(duplicatedMessage);
+    setChatMessages({ ...chatMessages });
+
     return true;
   };
   
   const BotMessage = ({ val }:any) => {
     const { show, data, meta } = val;
+    console.log(val.role);
+    
     return (
       <div className={`ai-bot-response-container ${!show ? "mrg" : ""}`}>
         {show && (
@@ -237,81 +249,118 @@ export function Chatbot() {
 
   };
  
-  const executeSendActions = async (value:string, type:string, role:string) => {
+  const executeSendActions = async (
+    value: string,
+    type: string,
+    role: string
+  ) => {
     setLoader(true);
     if (addUserRequest(value, type, role)) {
-      const success = await executeAgentRequest(chatMessages);
-      if (!success) {
-        addUserRequest("Something went wrong. Try again later.", "txt", "bot");
-      }
-      setLoader(false);
-      return success;
-    }
-    addUserRequest("Something went wrong. Try again later.", "txt", "bot");
-    setLoader(false);
-    return false;
-  };
-  
-  const executeAgentRequest = async (messages:any) => {
-    try {
-      const response = await makeAgentRequest({ body: messages });
-      if (response.status === 200) {
-        setChatMessages(response.data);
+      if (await executeAgentRequest(chatMessages)) {
         return true;
       }
-      addUserRequest("Something went wrong. Try again.", "txt", "bot");
-      return false;
+    } else {
+      addUserRequest(
+        "Something went wrong Try again after sometimes",
+        "txt",
+        "bot"
+      );
+    }
+    return false;
+  };
+
+  const executeAgentRequest = async (chatMessages:any): Promise<boolean> => {
+    try {
+      debugger
+      const response = await makeAgentRequest({ body: chatMessages });
+      debugger
+      console.log(response.data.data.data,response.status,"099876543");
+      
+      if (
+        response.status==200
+      ) {
+        setChatMessages(response.data.data.data);
+        setLoader(false);
+        return true;
+      } else {
+        setLoader(false);
+        addUserRequest("Something went wrong try again", "txt", "bot");
+        return false;
+      }
     } catch (error) {
       console.error("Error executing agent request:", error);
-      addUserRequest("Error executing agent request. Try again.", "txt", "bot");
       return false;
     }
   };
-  
-  const handleResponseBinding = (value:string, type:any) => {
-    if (value) {
-      executeSendActions(value, type, "user");
+ 
+  const handleResponseBinding = (value: any, type: string) => {
+    if (value != "") {
+      if (type == "multchc") {
+        let val = value.join(",");
+        executeSendActions(val, type, "user");
+      } else {
+        executeSendActions(value, type, "user");
+      }
     }
   };
-  
-  const handleFileUpload = (event:any) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setSelectedFile(chatMessages?.metaData?.entities?.file_uploaded ? "Uploaded" : file);
-      fileSubmitHandler(file);
+
+
+   // Handle file selection
+   const handleFileUpload = (event: any) => {
+    if (event.target.files) {
+      
+      setSelectedFile(chatMessages?.metaData?.entities?.file_uploaded?"Uploaded":event.target.files[0]);
+      fileSubmitHandler(event.target.files[0])
     }
   };
-  
-  const toBase64 = (file:any) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => resolve(reader.result);
-    reader.onerror = reject;
-  });
-  
+
+
+  const toBase64 = (file: File) => {
+    return new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+    });
+  };
+
+  // Handle form submission
   const fileSubmitHandler = async (fileData:any) => {
+  
+    
     if (!fileData) {
       setUploadStatus('No file selected');
       return;
     }
-  
+
     try {
+      // Convert the file to base64
       const fileBase64 = await toBase64(fileData);
-      const newChatMessages = {
-        ...chatMessages,
-        metaData: {
-          ...chatMessages.metaData,
-          entities: {
-            ...chatMessages.metaData.entities,
-            file: fileBase64,
-            filename: fileData.name,
-          },
-        },
-      };
-      setChatMessages(newChatMessages);
-      addUserRequest("Uploaded Successfully", "txt", "user");
-      await executeAgentRequest(newChatMessages);
+
+      // Create the updated metaData object
+const newMetaData = {
+  ...chatMessages.metaData,
+  entities: {
+    ...chatMessages.metaData.entities,
+    file: fileBase64,
+    filename: fileData.name,
+  },
+};
+
+// Create the new chatMessages object with the updated metaData
+const newChatMessages = {
+  ...chatMessages,
+  metaData: newMetaData,
+};
+
+// Update the state with the new chatMessages object
+setChatMessages(newChatMessages);
+addUserRequest("Uploaded Successfully","txt","user")
+      const response =  executeAgentRequest(chatMessages)
+      console.log(response,"099876543");
+      
     } catch (error) {
+      // Handle error
       console.error('Error uploading file:', error);
       setUploadStatus('Error uploading file');
     }

@@ -1,33 +1,33 @@
+import { log } from "node:console";
 import { useState } from "react";
 
-export function Buttons(data: any) {
-  const [disabledValue, setDisabledValue] = useState(false);
- 
-  const len = data?.record?.msg?.chatConversation?.length;
-
+export function Buttons({ record }:any) {
+  const [disabledButtons, setDisabledButtons] = useState(new Set());
+  console.log(record,"12343");
   
-  const bindchoics = () => {
-    return data?.record.value.map((val: any, index: any) => (
-      <>
-        {" "}
-        <button
-          id={val.options}
-          disabled={disabledValue}
-          className={
-            disabledValue
-              ? "btn-disabled"
-              
-              : "ai-button-style"
-          }
-          onClick={(e: any) => {
-              setDisabledValue(true);
-              data.record.func(e.target.id, "btn");
-          }}
-        >
-          {val.options}
-        </button>
-      </>
-    ));
+  const handleClick = (id:any) => {
+    setDisabledButtons((prev) => new Set(prev.add(id)));
+    record.func(id, "btn");
   };
-  return <>{bindchoics()}</>;
+
+  return (
+    <>
+      {record.value.map((val:any) => (
+        <div key={val.options} className="col-md-6 mb-4 mt-3">
+          <button
+            id={val.options}
+            disabled={disabledButtons.has(val.options)}
+            className={
+              disabledButtons.has(val.options)
+                ? "btn-disabled"
+                : "ai-button-style"
+            }
+            onClick={() => handleClick(val.options)}
+          >
+            {val.options}
+          </button>
+        </div>
+      ))}
+    </>
+  );
 }
