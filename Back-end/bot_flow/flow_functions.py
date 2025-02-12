@@ -1,7 +1,7 @@
 import base64,os
 from Services.constant_functions import extract_text_from_pdf,extract_text_from_docx
 from ai_helper.resume_processer import resume_score_ai,continue_convo
-from Model.chatbot_functions import handle_success_response_text,clear_after_all_steps,handle_success_response_html
+from Model.chatbot_functions import handle_success_response_text,handle_success_response_html
 
 
 

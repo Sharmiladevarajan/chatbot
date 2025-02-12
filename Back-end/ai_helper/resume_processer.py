@@ -1,18 +1,14 @@
 import os
 from langchain_openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai.chat_models import ChatOpenAI
+from Services.constant_functions import get_llm
 from Services.prompts import resume_checker_prompt,chat_history_prompt
 
 
 
 def resume_score_ai(jd,content):
     try:
-        llm=ChatOpenAI(
-        temperature=0,
-            model="gpt-4o-mini",
-           api_key=os.getenv("key")         )
-        print("in")
+        
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -23,7 +19,7 @@ def resume_score_ai(jd,content):
             ]
         )
 
-        chain = prompt | llm
+        chain = prompt | get_llm()
         response=chain.invoke(
             {
                 "resume_content":content,
@@ -39,11 +35,7 @@ def resume_score_ai(jd,content):
 
 def continue_convo(jd,content,user_query):
     try:
-        llm=ChatOpenAI(
-        temperature=0,
-            model="gpt-4o-mini",
-           api_key=os.getenv("key")         )
-        print("in")
+        
         prompt = ChatPromptTemplate.from_messages(
             [
                 (
@@ -54,7 +46,7 @@ def continue_convo(jd,content,user_query):
             ]
         )
 
-        chain = prompt | llm
+        chain = prompt | get_llm()
         response=chain.invoke(
             {
                 "input":content,

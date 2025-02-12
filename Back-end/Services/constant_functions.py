@@ -1,6 +1,6 @@
-import PyPDF2
+import PyPDF2,os
 from docx import Document
-
+from langchain_openai.chat_models import ChatOpenAI
 
 def extract_text_from_pdf(file_path):
     """
@@ -20,3 +20,10 @@ def extract_text_from_docx(file_path):
     for para in doc.paragraphs:
         text.append(para.text)
     return '\n'.join(text)
+
+
+def get_llm():
+    return ChatOpenAI(
+        temperature=0,
+            model="gpt-4o-mini",
+           api_key=os.getenv("key")      )

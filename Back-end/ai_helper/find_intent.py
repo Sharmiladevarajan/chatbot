@@ -1,18 +1,13 @@
 import os
 from langchain_openai import OpenAI
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_openai.chat_models import ChatOpenAI
 from Services.prompts import intent_checker_prompt,greeting_prompt
+from Services.constant_functions import get_llm
 
-def get_llm():
-    return ChatOpenAI(
-        temperature=0,
-            model="gpt-4o-mini",
-           api_key=os.getenv("key")      )
 
 def check_intent(content):
     try:
-        llm=get_llm()
+        
 
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -24,7 +19,7 @@ def check_intent(content):
             ]
         )
 
-        chain = prompt | llm
+        chain = prompt | get_llm()
         response=chain.invoke(
             {
                 
@@ -39,7 +34,7 @@ def check_intent(content):
 
 def get_greeting(content):
     try:
-        llm=get_llm()
+    
 
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -51,7 +46,7 @@ def get_greeting(content):
             ]
         )
 
-        chain = prompt | llm
+        chain = prompt | get_llm()
         response=chain.invoke(
             {
                 
