@@ -1,7 +1,6 @@
 const devConfig = {
   URLs: {
-    processConversation: "http://localhost:8080/process_conversation",
-    uploadFile: "http://localhost:8080/upload_file",
+    processConversation: "https://brave-beauty-non-prod.up.railway.app/process_conversation"
 
   },
 };
