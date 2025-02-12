@@ -78,8 +78,8 @@ export function Chatbot() {
       entities: {},
       intent: "",
       userData: {
-        phoneNo: "+91-877-817-8737",
-        email: "JamesAnderson@avatest.in",
+        phoneNo: "9876543210",
+        email: "sharmiladevarajan@gmail.com",
       
       },
     },
@@ -105,24 +105,15 @@ export function Chatbot() {
 
  
 
-  const addUserRequest = (
-    value: string,
-    type: string,
-    role: string
-  ): boolean => {
-    const lastMessage =
-      chatMessages?.chatConversation[chatMessages.chatConversation.length - 1];
-    const duplicatedMessage = {
+  const addUserRequest = (value:string, type:string, role:string) => {
+    const lastMessage = chatMessages.chatConversation.at(-1);
+    const newMessage = {
       ...lastMessage,
       order: lastMessage.order + 1,
-      role: role,
+      role,
       meta: {
         ...lastMessage.metaData,
         timeStamp: new Date(),
-      },
-      inputConfig: {
-        ...lastMessage.inputConfig,
-        
       },
       data: {
         ...lastMessage.data,
@@ -130,117 +121,101 @@ export function Chatbot() {
         contentType: "txt",
       },
     };
-    if (
   
-      type == "btn"
-    ) {
-      if (Array.isArray(lastMessage?.data?.content)) {
-        lastMessage?.data?.content?.forEach((choice: any) => {
-          choice.selected = choice.options === value;
-        });
-      }
-    }
-    chatMessages?.chatConversation.push(duplicatedMessage);
-    setChatMessages({ ...chatMessages });
-
-    return true;
-  };
-
-const bindChatMessages = () => {
-  try {
-    if (Object.keys(chatMessages).length != 0) {
-      return chatMessages?.chatConversation?.map((val: any, index: number) => {
-      
-        switch (val.role) {
-          case "bot":
-            return (
-              <>
-                <div
-                  className={`ai-bot-response-container ${
-                    !val.show ? "mrg" : ""
-                  }`}
-                >
-                 {!val.show ? null : (
-  <img
-    className="ai-bot-avatar"
-    src="images/chatbot-avatar.svg"
-    alt="chatbot avatar icon"
-  />
-)}
-
-
-                  <div className="ai-bot-response">
-                    <div
-                      
-                      className={`ai-bot-content  ${
-                        !val.show ? "ai-bot-content-btn" : ""
-                      }`}
-                    
-                    >
-                      
-
-                      <BindBotResponse
-                        record={{
-                          value: val.data,
-                          func: handleResponseBinding,
-                          message: chatMessages,
-                          role:val.role,
-                          file_func:handleFileUpload
-                        }}
-                      />
-                    </div>
-                    {val.meta.show?  (
-                      <span
-                        className={` ${
-                          val.show? "bot-time"
-                            : val.show
-                            ? "lt"
-                            : val.show
-                            ? "lt"
-                            : "lft"
-                        }`}
-                      >
-                        {convertTime(val.meta.timeStamp, "bot")}
-                      </span>
-                    ):null}
-                  </div>
-                </div>
-              </>
-            );
-          case "user":
-            return (
-              <div className="ai-user-response-container">
-                <div className="ai-user-response">
-                  <div
-                    className="ai-user-content "
-                    // style={{ whiteSpace: "pre-wrap" }}
-                  >
-                    <BindBotResponse
-                      record={{
-                        value: val.data,
-                        func: handleResponseBinding,
-                        role:val.role,
-                        file_func:handleFileUpload
-                      }}
-                    />
-                  </div>
-                  <span className="user-time">
-                    {convertTime(val.meta.timeStamp, "bot")}
-                  </span>
-                </div>
-              </div>
-            );
-        }
+    if (type === "btn" && Array.isArray(lastMessage?.data?.content)) {
+      lastMessage.data.content.forEach((choice:any) => {
+        choice.selected = choice.options === value;
       });
     }
-  } catch (error) {
-    addUserRequest(
-      "Something went wrong try again after sometimes",
-      "txt",
-      "bot"
+  
+    setChatMessages((prevMessages:any) => ({
+      ...prevMessages,
+      chatConversation: [...prevMessages.chatConversation, newMessage],
+    }));
+  
+    return true;
+  };
+  
+  const BotMessage = ({ val }:any) => {
+    const { show, data, meta } = val;
+    return (
+      <div className={`ai-bot-response-container ${!show ? "mrg" : ""}`}>
+        {show && (
+          <img
+            className="ai-bot-avatar"
+            src="images/chatbot-avatar.svg"
+            alt="chatbot avatar icon"
+          />
+        )}
+        <div className="ai-bot-response">
+          <div className={`ai-bot-content ${!show ? "ai-bot-content-btn" : ""}`}>
+            <BindBotResponse
+              record={{
+                value: data,
+                func: handleResponseBinding,
+                message: chatMessages,
+                role: val.role,
+                file_func: handleFileUpload,
+              }}
+            />
+          </div>
+          {meta.show && (
+            <span className={show ? "bot-time" : "lft"}>
+              {convertTime(meta.timeStamp, "bot")}
+            </span>
+          )}
+        </div>
+      </div>
     );
-  }
-};
+  };
+  
+  const UserMessage = ({ val }:any) => {
+    const { data, meta } = val;
+    return (
+      <div className="ai-user-response-container">
+        <div className="ai-user-response">
+          <div className="ai-user-content">
+            <BindBotResponse
+              record={{
+                value: data,
+                func: handleResponseBinding,
+                role: val.role,
+                file_func: handleFileUpload,
+              }}
+            />
+          </div>
+          <span className="user-time">
+            {convertTime(meta.timeStamp, "bot")}
+          </span>
+        </div>
+      </div>
+    );
+  };
+  
+  const bindChatMessages = () => {
+    try {
+      if (Object.keys(chatMessages).length === 0) return null;
+  
+      return chatMessages.chatConversation.map((val:any, index:number) => {
+        switch (val.role) {
+          case "bot":
+            return <BotMessage key={index} val={val} />;
+          case "user":
+            return <UserMessage key={index} val={val} />;
+          default:
+            return null;
+        }
+      });
+    } catch (error) {
+      addUserRequest(
+        "Something went wrong, try again after some time.",
+        "txt",
+        "bot"
+      );
+      return null;
+    }
+  };
+  
 
   const convertTime = (dateTime: any, role: string) => {
     if (dateTime) {
@@ -262,121 +237,86 @@ const bindChatMessages = () => {
 
   };
  
-  const executeSendActions = async (
-    value: string,
-    type: string,
-    role: string
-  ) => {
+  const executeSendActions = async (value:string, type:string, role:string) => {
     setLoader(true);
     if (addUserRequest(value, type, role)) {
-      if (await executeAgentRequest(chatMessages)) {
-        return true;
+      const success = await executeAgentRequest(chatMessages);
+      if (!success) {
+        addUserRequest("Something went wrong. Try again later.", "txt", "bot");
       }
-    } else {
-      addUserRequest(
-        "Something went wrong Try again after sometimes",
-        "txt",
-        "bot"
-      );
+      setLoader(false);
+      return success;
     }
+    addUserRequest("Something went wrong. Try again later.", "txt", "bot");
+    setLoader(false);
     return false;
   };
-
-  const executeAgentRequest = async (chatMessages:any): Promise<boolean> => {
+  
+  const executeAgentRequest = async (messages:any) => {
     try {
-      const response = await makeAgentRequest({ body: chatMessages });
-
-      console.log(response);
-      
-      if (
-        response.status==200
-      ) {
+      const response = await makeAgentRequest({ body: messages });
+      if (response.status === 200) {
         setChatMessages(response.data);
-        setLoader(false);
         return true;
-      } else {
-        setLoader(false);
-        addUserRequest("Something went wrong try again", "txt", "bot");
-        return false;
       }
+      addUserRequest("Something went wrong. Try again.", "txt", "bot");
+      return false;
     } catch (error) {
       console.error("Error executing agent request:", error);
+      addUserRequest("Error executing agent request. Try again.", "txt", "bot");
       return false;
     }
   };
- 
-  const handleResponseBinding = (value: any, type: string) => {
-    if (value != "") {
-      if (type == "multchc") {
-        let val = value.join(",");
-        executeSendActions(val, type, "user");
-      } else {
-        executeSendActions(value, type, "user");
-      }
-    }
-  };
-
-
-   // Handle file selection
-   const handleFileUpload = (event: any) => {
-    if (event.target.files) {
-      
-      setSelectedFile(chatMessages?.metaData?.entities?.file_uploaded?"Uploaded":event.target.files[0]);
-      fileSubmitHandler(event.target.files[0])
-    }
-  };
-
-
-  const toBase64 = (file: File) => {
-    return new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => resolve(reader.result as string);
-      reader.onerror = reject;
-    });
-  };
-
-  // Handle form submission
-  const fileSubmitHandler = async (fileData:any) => {
   
-    
+  const handleResponseBinding = (value:string, type:any) => {
+    if (value) {
+      executeSendActions(value, type, "user");
+    }
+  };
+  
+  const handleFileUpload = (event:any) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedFile(chatMessages?.metaData?.entities?.file_uploaded ? "Uploaded" : file);
+      fileSubmitHandler(file);
+    }
+  };
+  
+  const toBase64 = (file:any) => new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
+  
+  const fileSubmitHandler = async (fileData:any) => {
     if (!fileData) {
       setUploadStatus('No file selected');
       return;
     }
-
+  
     try {
-      // Convert the file to base64
       const fileBase64 = await toBase64(fileData);
-
-      // Create the updated metaData object
-const newMetaData = {
-  ...chatMessages.metaData,
-  entities: {
-    ...chatMessages.metaData.entities,
-    file: fileBase64,
-    filename: fileData.name,
-  },
-};
-
-// Create the new chatMessages object with the updated metaData
-const newChatMessages = {
-  ...chatMessages,
-  metaData: newMetaData,
-};
-
-// Update the state with the new chatMessages object
-setChatMessages(newChatMessages);
-addUserRequest("Uploaded Successfully","txt","user")
-      const response =  executeAgentRequest(newChatMessages)
-      
-      
+      const newChatMessages = {
+        ...chatMessages,
+        metaData: {
+          ...chatMessages.metaData,
+          entities: {
+            ...chatMessages.metaData.entities,
+            file: fileBase64,
+            filename: fileData.name,
+          },
+        },
+      };
+      setChatMessages(newChatMessages);
+      addUserRequest("Uploaded Successfully", "txt", "user");
+      await executeAgentRequest(newChatMessages);
     } catch (error) {
-      // Handle error
       console.error('Error uploading file:', error);
       setUploadStatus('Error uploading file');
     }
   };
+  
 console.log(chatMessages);
 
   return (
