@@ -116,9 +116,11 @@ export function Chatbot() {
       ...lastMessage,
       order: lastMessage.order + 1,
       role: role,
+      show:role=="bot"?true:true,
       meta: {
         ...lastMessage.metaData,
         timeStamp: new Date(),
+        show:true
       },
       inputConfig: {
         ...lastMessage.inputConfig,
@@ -274,12 +276,12 @@ export function Chatbot() {
       debugger
       const response = await makeAgentRequest({ body: chatMessages });
       debugger
-      console.log(response.data.data.data,response.status,"099876543");
+      console.log(response.data.data,response.status,"099876543");
       
       if (
-        response.status==200
+        response.data.data.status_code==200
       ) {
-        setChatMessages(response.data.data.data);
+        setChatMessages(response.data.data);
         setLoader(false);
         return true;
       } else {
@@ -354,6 +356,7 @@ const newChatMessages = {
 };
 
 // Update the state with the new chatMessages object
+debugger
 setChatMessages(newChatMessages);
 addUserRequest("Uploaded Successfully","txt","user")
       const response =  executeAgentRequest(chatMessages)
