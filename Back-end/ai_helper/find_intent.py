@@ -8,7 +8,7 @@ def get_llm():
     return ChatOpenAI(
         temperature=0,
             model="gpt-4o-mini",
-           api_key=os.getenv("OPENAI_API_KEY")      )
+           api_key=os.getenv("key")      )
 
 def check_intent(content):
     try:
