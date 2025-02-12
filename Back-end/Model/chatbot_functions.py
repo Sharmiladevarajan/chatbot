@@ -20,12 +20,9 @@ def clear_after_all_steps(payload):
             if key in payload["metaData"]:
                 if key == "conversationID":
                     payload["metaData"][key] = 0
-                # elif key == "entities":
-                #     payload["metaData"][key] = {}
-                # else:
-                #     payload["metaData"][key] = ""
+               
             else:
-                # Optionally raise an exception, set a default value, or continue silently
+            
                 pass
 
         return payload
