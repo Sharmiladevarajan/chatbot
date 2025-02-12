@@ -1,6 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { format, parseISO } from "date-fns-tz";
-import { v4 as uuidv4 } from "uuid";
 import {  makeAgentRequest } from "../Service/Api";
 import {
   userDetails,
@@ -152,9 +150,7 @@ const bindChatMessages = () => {
   try {
     if (Object.keys(chatMessages).length != 0) {
       return chatMessages?.chatConversation?.map((val: any, index: number) => {
-        let button = val?.data?.contentType;
-        let type = chatMessages?.chatConversation[index + 1]?.data?.contentType;
-
+      
         switch (val.role) {
           case "bot":
             return (
@@ -175,15 +171,13 @@ const bindChatMessages = () => {
 
                   <div className="ai-bot-response">
                     <div
-                      // className={`ai-bot-content  ${
-                      //   button == "btn"||button == "doc" ? "ai-bot-content-btn" : ""
-                      // }`}
+                      
                       className={`ai-bot-content  ${
                         !val.show ? "ai-bot-content-btn" : ""
                       }`}
-                      // style={{ whiteSpace: "pre-wrap" }}
+                    
                     >
-                      {/* .ai-bot-content-btn */}
+                      
 
                       <BindBotResponse
                         record={{
