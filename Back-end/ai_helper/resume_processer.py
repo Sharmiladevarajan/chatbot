@@ -11,8 +11,7 @@ def resume_score_ai(jd,content):
         llm=ChatOpenAI(
         temperature=0,
             model="gpt-4o-mini",
-            api_key="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",
-        )
+           api_key=os.getenv("OPENAI_API_KEY")         )
         print("in")
         prompt = ChatPromptTemplate.from_messages(
             [
@@ -43,8 +42,7 @@ def continue_convo(jd,content,user_query):
         llm=ChatOpenAI(
         temperature=0,
             model="gpt-4o-mini",
-            api_key="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",
-        )
+           api_key=os.getenv("OPENAI_API_KEY")         )
         print("in")
         prompt = ChatPromptTemplate.from_messages(
             [
