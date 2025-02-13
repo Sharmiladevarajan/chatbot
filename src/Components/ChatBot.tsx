@@ -273,7 +273,7 @@ export function Chatbot() {
       console.log(response.data.data,response.status,"099876543");
       
       if (
-        response.data.data.status_code===200
+        response.data.status_code===200
       ) {
         setChatMessages(response.data.data);
         setLoader(false);
@@ -349,7 +349,7 @@ const newChatMessages = {
 
 setChatMessages(newChatMessages);
 addUserRequest("Uploaded Successfully","txt","user")
-      const response =  executeAgentRequest(chatMessages)
+      const response =  executeAgentRequest(newChatMessages)
       console.log(response,"099876543");
       
     } catch (error) {
