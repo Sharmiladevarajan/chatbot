@@ -359,7 +359,7 @@ addUserRequest("Uploaded Successfully","txt","user")
     }
   };
   
-console.log(chatMessages,selectedFile,uploadStatus);
+console.log(chatMessages,selectedFile,uploadStatus,"values");
 
   return (
     <>
