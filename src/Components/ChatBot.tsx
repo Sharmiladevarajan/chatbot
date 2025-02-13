@@ -15,9 +15,10 @@ export function Chatbot() {
   
   const [chatMessages, setChatMessages] = useState<any>({
     chatConversation: [
+      
       {
         data: {
-          content: 'Hello, How can i help you',
+          content: 'Hello,Please Upload Your Resume.',
           contentType: "txt",
         },
         inputConfig: {
@@ -47,10 +48,10 @@ export function Chatbot() {
         },
         inputConfig: {
           disableAttachment: 0,
-          disableEmoji: 0,
-          disableText: 0,
-          disableVoice: 0,
-          hiddenAttachment: 0,
+          disableEmoji: 1,
+          disableText: 1,
+          disableVoice: 1,
+          hiddenAttachment: 1,
           hiddenEmoji: 1,
           hiddenText: 0,
           hiddenVoice: 0,
@@ -378,22 +379,32 @@ console.log(chatMessages,selectedFile,uploadStatus,"values");
         </div>
         <div className="chat-input">
         <input
-          type="text"
-          className="footer-icons"
-          placeholder="Type a message..."
-          value={inputVal}
-          onChange={(e) => {
-            setInputVal(e.target.value);
-          }}
-          onKeyUp={(e) => {
-            if (e.key === "Enter") {
-              if (inputVal !== "") {
-                executeSendActions(inputVal, "txt", "user");
-                setInputVal("");
-              }
-            }
-          }}
-        />
+  type="text"
+  className="footer-icons"
+  placeholder="Type a message..."
+  value={inputVal}
+  disabled={
+    chatMessages?.chatConversation
+      ? chatMessages.chatConversation[
+          chatMessages.chatConversation.length - 1
+        ]?.inputConfig?.disableText === 1
+        ? true
+        : false
+      : false
+  }
+  onChange={(e) => {
+    setInputVal(e.target.value);
+  }}
+  onKeyUp={(e) => {
+    if (e.key === "Enter") {
+      if (inputVal !== "") {
+        executeSendActions(inputVal, "txt", "user");
+        setInputVal("");
+      }
+    }
+  }}
+/>
+
 
 <img
               className="footer-icons"

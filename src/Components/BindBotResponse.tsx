@@ -13,33 +13,36 @@ console.log(record,"props");
     const commonProps = { value: content,role };
     console.log(commonProps);
     
-    switch (contentType) {
-      case 'txt':
-        return (
-          <div className="col-md-6 mb-4 mt-3">
-            <Text {...commonProps} />
-          </div>
-        );
-      case 'html':
-        return (
-          <div className="col-md-6 mb-4 mt-3">
-            <HTMLContent {...commonProps} />
-          </div>
-        );
-      case 'btn':
-        return (
-          <div className="col-md-6 mb-4 mt-3">
-            <Buttons value={content} func={func} msg={message} />
-          </div>
-        );
-      case 'doc':
-        return (
-          <div className="col-md-6 mb-4 mt-3">
-            <Document value={content} func={file_func} />
-          </div>
-        );
-      default:
-        return null;
+    if(record){
+      debugger
+      switch (contentType) {
+        case 'txt':
+          return (
+            <div className="col-md-6 mb-4 mt-3">
+              <Text {...commonProps} />
+            </div>
+          );
+        case 'html':
+          return (
+            <div className="col-md-6 mb-4 mt-3">
+              <HTMLContent {...commonProps} />
+            </div>
+          );
+        case 'btn':
+          return (
+            <div className="col-md-6 mb-4 mt-3">
+              <Buttons value={content} func={func} msg={message} />
+            </div>
+          );
+        case 'doc':
+          return (
+            <div className="col-md-6 mb-4 mt-3">
+              <Document value={content} func={file_func} />
+            </div>
+          );
+        default:
+          return null;
+      }
     }
   };
 

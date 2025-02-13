@@ -38,7 +38,7 @@
 
 body {
   font-size: 13px;
-  color: #cb4040;
+  color: #3036be;
   font-family: "InterMedium";
 }
 
@@ -320,7 +320,7 @@ body {
 }
 
 .ai-button-style {
-  background-image: linear-gradient(to bottom, #8849de, #5c00bd);
+  background-image: linear-gradient(to bottom, #39a4e3, #3baddd);
   padding: 10px 16px;
   color: #ffffff;
   border-radius: 6px;
@@ -366,8 +366,7 @@ body {
 /*Custom scrollbar styles ends*/
 /*Scroll to bottom styles starts*/
 .ai-downarrow {
-  background-image: linear-gradient(to bottom, #8849de, #5c00bd);
-
+  background-image: linear-gradient(to bottom, #b0d9fa, #4b60ba);
   /* background: rgba(67, 118, 123, 0.5); */
   width: 40px;
   height: 40px;
@@ -375,7 +374,7 @@ body {
   position: absolute;
   bottom: 13px;
   right: 10px;
-  border: 1px solid #8849de;
+  border: 1px solid #6490da;
   box-shadow: 0 6px 12px 5c00bd;
   font-size: 16px;
   align-items: center;
@@ -383,6 +382,8 @@ body {
   cursor: pointer;
   display: none;
 }
+
+
 
 .ai-downarrow:hover {
   background:  #8849de;
