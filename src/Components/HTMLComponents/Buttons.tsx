@@ -1,9 +1,7 @@
-import { log } from "node:console";
 import { useState } from "react";
 
 export function Buttons({ record }:any) {
   const [disabledButtons, setDisabledButtons] = useState(new Set());
-  console.log(record,"12343");
   
   const handleClick = (id:any) => {
     setDisabledButtons((prev) => new Set(prev.add(id)));

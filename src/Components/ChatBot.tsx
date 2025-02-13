@@ -1,14 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import {  makeAgentRequest } from "../Service/Api";
-import {
-  userDetails,
-  ChatMessage,
-  ChatConversation,
-  BotConfig,
-} from "../Interface/Interface";
 import BindBotResponse from "./BindBotResponse";
 import LoadingIndicator from "../OtherComponents/Loader";
-import { log } from "console";
 
 
 export function Chatbot() {
@@ -226,6 +219,7 @@ export function Chatbot() {
         "txt",
         "bot"
       );
+      setError("Oops Sorry, Can't process your request try after sometimes.")
       return null;
     }
   };
@@ -291,6 +285,7 @@ export function Chatbot() {
       }
     } catch (error) {
       console.error("Error executing agent request:", error);
+      setError("Oops Sorry, Can't process your request try after sometimes.")
       return false;
     }
   };
@@ -352,21 +347,19 @@ const newChatMessages = {
   metaData: newMetaData,
 };
 
-// Update the state with the new chatMessages object
-debugger
 setChatMessages(newChatMessages);
 addUserRequest("Uploaded Successfully","txt","user")
       const response =  executeAgentRequest(chatMessages)
       console.log(response,"099876543");
       
     } catch (error) {
-      // Handle error
       console.error('Error uploading file:', error);
       setUploadStatus('Error uploading file');
+      setError("Oops Sorry, Can't process your request try after sometimes.")
     }
   };
   
-console.log(chatMessages);
+console.log(chatMessages,selectedFile,uploadStatus);
 
   return (
     <>
@@ -393,8 +386,8 @@ console.log(chatMessages);
             setInputVal(e.target.value);
           }}
           onKeyUp={(e) => {
-            if (e.key == "Enter") {
-              if (inputVal != "") {
+            if (e.key === "Enter") {
+              if (inputVal !== "") {
                 executeSendActions(inputVal, "txt", "user");
                 setInputVal("");
               }
@@ -432,7 +425,7 @@ console.log(chatMessages);
                   : 0.5,
               }}
               onClick={(e) => {
-                if (inputVal != "") {
+                if (inputVal !== "") {
                   executeSendActions(inputVal, "txt", "user");
                   setInputVal("");
                 }
